@@ -8,7 +8,7 @@ New Relic 検証用環境
 
 #### EC2のキーペア
 EC2にsshログインする場合には予め秘密鍵を作っておく必要があるので、[Amazon EC2 キーペアと Linux インスタンス](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-key-pairs.html)を参考にしてキーペアを作成しておくこと。
-作成する際のKey名は `infra-study` とする。
+作成する際のKey名は `ec-cube` とする。
 ※後続手順でterraform applyする際にCLI上から入力を求められる。
 
 #### インバウンドアクセス制限
@@ -22,7 +22,7 @@ EC2にsshログインする場合には予め秘密鍵を作っておく必要�
 apply後にAWSコンソールを見て、applyしたリソースが追加されていることを確認する。
 
 ```shell
-$ ec2_name=infra-study
+$ ec2_name=ec-cube
 $ instance_id=$(aws ec2 describe-instances \
   --filters "Name=tag:Name,Values=$ec2_name" \
   | jq -r ".Reservations[0].Instances[0].InstanceId")
@@ -42,18 +42,13 @@ host i-* mi-*
 以下を実行することでEC2にアクセスできることを確認する。
 
 ```shell
-$ ec2_name=infra-study
+$ ec2_name=ec-cube
 $ instance_id=$(aws ec2 describe-instances \
   --filters "Name=tag:Name,Values=$ec2_name" "Name=instance-state-name,Values=running" \
   | jq -r ".Reservations[0].Instances[0].InstanceId")
 
-$ ssh -i ~/path/to/infra-study.pem ec2-user@"$instance_id"
-Last login: Sun Jan 29 11:55:11 2023 from localhost
+$ ssh -i ~/path/to/ec-cube.pem ec2-user@"$instance_id"
 
-       __|  __|_  )
-       _|  (     /   Amazon Linux 2 AMI
-      ___|\___|___|
-
-https://aws.amazon.com/amazon-linux-2/
-[ec2-user@ip-0-1-2-345 ~]$
+Starting session with SessionId: rkobayashi-0e405dc0d8bc24fe2
+sh-4.2$ 
 ```
